@@ -77,6 +77,8 @@ struct PillButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.system(size: 11, weight: .medium))
+            .lineLimit(1)
+            .fixedSize()
             .padding(.horizontal, 10)
             .padding(.vertical, 4)
             .background(Capsule().fill(Color.primary.opacity(configuration.isPressed ? 0.18 : 0.09)))
@@ -126,13 +128,13 @@ struct PanelView: View {
             .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color.primary.opacity(0.06)))
             HStack(spacing: 8) {
                 if !model.needsKeys {
-                    Label("Using macOS controls", systemImage: "checkmark.circle")
+                    Label("macOS controls", systemImage: "checkmark.circle").lineLimit(1).fixedSize()
                         .font(.system(size: 11)).foregroundStyle(.secondary)
                 } else if model.keysActive {
-                    Label("Keys on", systemImage: "checkmark.circle.fill")
+                    Label("Keys on", systemImage: "checkmark.circle.fill").lineLimit(1).fixedSize()
                         .font(.system(size: 11)).foregroundStyle(.secondary)
                 } else {
-                    Button("Enable brightness keys…", action: enableKeys).buttonStyle(PillButtonStyle())
+                    Button("Enable keys…", action: enableKeys).help("Let Glimmer use the brightness keys (needs Accessibility permission)").buttonStyle(PillButtonStyle())
                 }
                 Spacer()
                 Button("Support ♥") {

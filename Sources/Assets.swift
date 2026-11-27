@@ -468,6 +468,9 @@ func renderAssets(to dir: String) {
     let demo = GlimmerModel(previewScreen: 0.72, keyboard: 0.6, workaround: true)
     writePNG(PanelShot(model: demo, dark: true), to: out.appendingPathComponent("panel-dark.png"))
     writePNG(PanelShot(model: demo, dark: false), to: out.appendingPathComponent("panel-light.png"))
+    let keysOff = GlimmerModel(previewScreen: 0.72, keyboard: 0.6, workaround: true)
+    keysOff.keysActive = false
+    writePNG(PanelShot(model: keysOff, dark: true), to: out.appendingPathComponent("panel-keys-off.png"))
     writePNG(HeroShot(model: demo), to: out.appendingPathComponent("hero.png"))
 
     // Animated preview: keyboard light up, screen dims and comes back
