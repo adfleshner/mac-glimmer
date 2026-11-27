@@ -27,6 +27,20 @@ final class GlimmerModel: ObservableObject {
         detect()
     }
 
+    /// A model that never touches the hardware — used to render screenshots.
+    init(previewScreen: Double, keyboard: Double, workaround: Bool) {
+        screenBackend = PreviewScreen(isWorkaround: workaround)
+        keyboardBackend = PreviewKeyboard(isWorkaround: workaround)
+        screenWorkaround = workaround
+        keyboardWorkaround = workaround
+        hasKeyboard = true
+        keysActive = true
+        syncing = true
+        screen = previewScreen
+        self.keyboard = keyboard
+        syncing = false
+    }
+
     /// (Re)choose backends — called at launch and after wake, in case macOS recovered.
     func detect() {
         screenBackend = makeScreenBrightness()

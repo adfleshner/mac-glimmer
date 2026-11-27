@@ -1,6 +1,35 @@
-# ☀︎ Glimmer
+<p align="center">
+  <img src="docs/images/icon.png" width="128" alt="Glimmer icon">
+</p>
 
-**Your keyboard light and screen brightness, back — even after a screen swap.**
+<h1 align="center">Glimmer</h1>
+
+<p align="center">
+  <b>A glimmer of hope for every MacBook left in the dark.</b><br>
+  Screen brightness and keyboard light, back — even after a screen swap.
+</p>
+
+<p align="center">
+  <img src="docs/images/hero.png" alt="Glimmer's Control Center–style panel open from the menu bar">
+</p>
+
+## TL;DR
+
+**Swapped your MacBook's screen and now the keyboard light dies at login and the brightness
+keys do nothing?** It isn't broken hardware. macOS doesn't recognise the new panel, so it
+gives up on brightness. Glimmer is a tiny menu bar app that takes over where macOS gave up.
+
+**Install** (needs the Xcode Command Line Tools: `xcode-select --install`):
+
+```bash
+git clone git@github.com:adfleshner/mac-glimmer.git && cd mac-glimmer && ./scripts/install.sh
+```
+
+Then click the **☀︎** in the menu bar and, if it asks, choose **Enable brightness keys…**
+and switch Glimmer on in **System Settings → Privacy & Security → Accessibility**.
+That's it. It starts at every login. To remove it: `./scripts/uninstall.sh`.
+
+---
 
 Glimmer is a tiny menu bar app for macOS that brings back working screen-brightness and
 keyboard-backlight controls on MacBooks where macOS has lost them. When macOS's own controls
@@ -10,7 +39,11 @@ keys, the Touch Bar buttons and a Control Center–style slider panel all work a
 
 No new Mac. No logic-board repair. No turning off System Integrity Protection.
 
-<p align="center"><i>Menu bar ☀︎ → Display and Keyboard Brightness sliders, just like Control Center.</i></p>
+<p align="center">
+  <img src="docs/images/panel.gif" width="356" alt="Dragging the Display and Keyboard Brightness sliders">
+  &nbsp;
+  <img src="docs/images/panel-light.png" width="356" alt="Glimmer panel in light mode">
+</p>
 
 ---
 
@@ -94,6 +127,11 @@ click it and switch Glimmer on in **System Settings → Privacy & Security → A
 ```bash
 ./scripts/uninstall.sh
 ```
+
+### Icon and screenshots
+
+The app icon and every image in this README are drawn by Glimmer itself from its real SwiftUI
+views. After changing the panel or the icon, regenerate them with `./scripts/render-assets.sh`.
 
 ## How each part decides what to use
 

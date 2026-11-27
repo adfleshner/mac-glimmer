@@ -72,6 +72,18 @@ struct Card<Content: View>: View {
     }
 }
 
+/// Small Control Center–style pill button (pure SwiftUI, so it also renders in screenshots).
+struct PillButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: 11, weight: .medium))
+            .padding(.horizontal, 10)
+            .padding(.vertical, 4)
+            .background(Capsule().fill(Color.primary.opacity(configuration.isPressed ? 0.18 : 0.09)))
+            .contentShape(Capsule())
+    }
+}
+
 struct PanelView: View {
     @ObservedObject var model: GlimmerModel
     let enableKeys: () -> Void
@@ -94,10 +106,10 @@ struct PanelView: View {
                     Label("Brightness keys on", systemImage: "checkmark.circle.fill")
                         .font(.system(size: 11)).foregroundStyle(.secondary)
                 } else {
-                    Button("Enable brightness keys…", action: enableKeys).font(.system(size: 11))
+                    Button("Enable brightness keys…", action: enableKeys).buttonStyle(PillButtonStyle())
                 }
                 Spacer()
-                Button("Quit Glimmer") { NSApp.terminate(nil) }.font(.system(size: 11))
+                Button("Quit Glimmer") { NSApp.terminate(nil) }.buttonStyle(PillButtonStyle())
             }
             .padding(.horizontal, 4)
             .padding(.top, 2)

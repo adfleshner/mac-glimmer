@@ -78,6 +78,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 }
 
 let app = NSApplication.shared
+
+// `Glimmer --render-assets <dir>`: draw the icon and README images, then exit.
+if let i = CommandLine.arguments.firstIndex(of: "--render-assets") {
+    let dir = CommandLine.arguments.indices.contains(i + 1) ? CommandLine.arguments[i + 1] : "assets"
+    MainActor.assumeIsolated { renderAssets(to: dir) }
+    exit(0)
+}
+
 let delegate = AppDelegate()
 app.delegate = delegate
 app.setActivationPolicy(.accessory)

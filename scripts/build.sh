@@ -22,6 +22,8 @@ for arch in arm64 x86_64; do
 done
 lipo -create -output "$APP/Contents/MacOS/Glimmer" build/obj/Glimmer-arm64 build/obj/Glimmer-x86_64
 cp Resources/Info.plist "$APP/Contents/Info.plist"
+mkdir -p "$APP/Contents/Resources"
+cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 
 if [ -z "${SIGN_IDENTITY:-}" ]; then
   SIGN_IDENTITY=$(security find-identity -v -p codesigning 2>/dev/null \
