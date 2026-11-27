@@ -192,10 +192,18 @@ Glimmer is free and always will be. If it saved you from buying a new Mac, a cof
 maintained and helps bring the same fix to more MacBooks. Totally optional, always appreciated. ♥
 
 <p align="center">
-  <a href="https://buymeacoffee.com/adfleshner"><img src="docs/images/support-bmc.png" width="336" alt="Buy me a coffee — Support Glimmer"></a>
+  <a href="https://buymeacoffee.com/adfleshner"><img src="docs/images/support-bmc.png" width="336" alt="Buy me a coffee — Support Glimmer"></a><br>
+  <a href="https://venmo.com/u/Aaron-fleshner"><img src="docs/images/support-venmo.png" width="156" alt="Venmo"></a>
+  <a href="https://cash.app/$adfleshner"><img src="docs/images/support-cashapp.png" width="156" alt="Cash App"></a>
+  <a href="https://revolut.me/aaron7bbx"><img src="docs/images/support-revolut.png" width="156" alt="Revolut"></a>
 </p>
 
-<p align="center"><sub><a href="https://buymeacoffee.com/adfleshner">buymeacoffee.com/adfleshner</a></sub></p>
+<p align="center"><sub>
+  <a href="https://buymeacoffee.com/adfleshner">Buy Me a Coffee</a> ·
+  <a href="https://venmo.com/u/Aaron-fleshner">Venmo @Aaron-fleshner</a> ·
+  <a href="https://cash.app/$adfleshner">Cash App $adfleshner</a> ·
+  <a href="https://revolut.me/aaron7bbx">Revolut @aaron7bbx</a>
+</sub></p>
 
 ## FAQ
 
