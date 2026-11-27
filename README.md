@@ -13,7 +13,7 @@
   <a href="https://github.com/adfleshner/mac-glimmer/releases/latest/download/Glimmer.dmg">
     <img src="docs/images/download-button.png" width="344" alt="Download Glimmer for macOS">
   </a><br>
-  <sub>Free · Apple Silicon & Intel · macOS 13 Ventura or later · <a href="https://github.com/adfleshner/mac-glimmer/releases/latest">Release notes</a> · <a href="#support-glimmer">☕ Support Glimmer</a></sub>
+  <sub>Free · Apple Silicon & Intel · macOS 13 Ventura or later · <a href="https://github.com/adfleshner/mac-glimmer/releases/latest">Release notes</a> · <a href="https://medium.com/@adfleshner/fixing-a-macbook-keyboard-light-that-turns-off-when-you-log-in-after-a-screen-replacement-89998e0d547e">📖 The story</a> · <a href="#support-glimmer">☕ Support Glimmer</a></sub>
 </p>
 
 <p align="center">
@@ -96,6 +96,8 @@ controls were dead, and every guide online said "reset the SMC" or "it's hardwar
 buying a new Mac, the problem was traced step by step through macOS's logs and drivers down to
 the panel-ID mismatch above — and Glimmer is the result: a small, safe, reversible fix that
 anyone with the same problem can install in a minute.
+
+📖 **Read the whole story on Medium:** [Fixing a MacBook Keyboard Light That Turns Off When You Log In (After a Screen Replacement)](https://medium.com/@adfleshner/fixing-a-macbook-keyboard-light-that-turns-off-when-you-log-in-after-a-screen-replacement-89998e0d547e)
 
 ## Features
 
