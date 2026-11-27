@@ -13,7 +13,7 @@
   <a href="https://github.com/adfleshner/mac-glimmer/releases/latest/download/Glimmer.dmg">
     <img src="docs/images/download-button.png" width="344" alt="Download Glimmer for macOS">
   </a><br>
-  <sub>Free · Apple Silicon & Intel · macOS 13 Ventura or later · <a href="https://github.com/adfleshner/mac-glimmer/releases/latest">Release notes</a></sub>
+  <sub>Free · Apple Silicon & Intel · macOS 13 Ventura or later · <a href="https://github.com/adfleshner/mac-glimmer/releases/latest">Release notes</a> · <a href="#support-glimmer">☕ Support Glimmer</a></sub>
 </p>
 
 <p align="center">
@@ -185,6 +185,17 @@ views. After changing the panel or the icon, regenerate them with `./scripts/ren
 - Tested on a MacBook Pro 15-inch 2019 (MacBookPro15,3) with a 2017 panel on macOS Sequoia.
   The keyboard workaround targets Intel MacBooks with backlit keyboards (2016–2020); on Macs
   where macOS works normally, Glimmer stays in native mode.
+
+## Support Glimmer
+
+Glimmer is free and always will be. If it saved you from buying a new Mac, a coffee keeps it
+maintained and helps bring the same fix to more MacBooks. Totally optional, always appreciated. ♥
+
+<p align="center">
+  <a href="https://buymeacoffee.com/adfleshner"><img src="docs/images/support-bmc.png" width="336" alt="Buy me a coffee — Support Glimmer"></a>
+</p>
+
+<p align="center"><sub><a href="https://buymeacoffee.com/adfleshner">buymeacoffee.com/adfleshner</a></sub></p>
 
 ## FAQ
 

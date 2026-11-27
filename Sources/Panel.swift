@@ -129,13 +129,18 @@ struct PanelView: View {
                     Label("Using macOS controls", systemImage: "checkmark.circle")
                         .font(.system(size: 11)).foregroundStyle(.secondary)
                 } else if model.keysActive {
-                    Label("Brightness keys on", systemImage: "checkmark.circle.fill")
+                    Label("Keys on", systemImage: "checkmark.circle.fill")
                         .font(.system(size: 11)).foregroundStyle(.secondary)
                 } else {
                     Button("Enable brightness keys…", action: enableKeys).buttonStyle(PillButtonStyle())
                 }
                 Spacer()
-                Button("Quit Glimmer") { NSApp.terminate(nil) }.buttonStyle(PillButtonStyle())
+                Button("Support ♥") {
+                    NSWorkspace.shared.open(URL(string: "https://buymeacoffee.com/adfleshner")!)
+                }
+                .buttonStyle(PillButtonStyle())
+                .help("Buy me a coffee — keeps Glimmer free and maintained")
+                Button("Quit") { NSApp.terminate(nil) }.buttonStyle(PillButtonStyle())
             }
             .padding(.horizontal, 4)
             .padding(.top, 2)

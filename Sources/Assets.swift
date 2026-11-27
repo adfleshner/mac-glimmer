@@ -292,6 +292,69 @@ struct DMGWindowShot: View {
     }
 }
 
+/// README "Support Glimmer" hero button (Buy Me a Coffee).
+struct SupportCoffeeButton: View {
+    var body: some View {
+        HStack(spacing: 12) {
+            ZStack {
+                Circle().fill(Color.white.opacity(0.22)).frame(width: 40, height: 40)
+                Image(systemName: "cup.and.saucer.fill")
+                    .font(.system(size: 19, weight: .semibold))
+            }
+            VStack(alignment: .leading, spacing: 1) {
+                Text("Buy me a coffee")
+                    .font(.system(size: 19, weight: .heavy, design: .rounded))
+                Text("Support Glimmer")
+                    .font(.system(size: 11.5, weight: .semibold))
+                    .opacity(0.85)
+            }
+            Spacer(minLength: 4)
+            Image(systemName: "heart.fill").font(.system(size: 16, weight: .bold)).opacity(0.9)
+        }
+        .foregroundStyle(Color(red: 0.24, green: 0.10, blue: 0.04))
+        .padding(.leading, 12).padding(.trailing, 20).padding(.vertical, 10)
+        .frame(width: 300)
+        .background(
+            Capsule()
+                .fill(LinearGradient(colors: [Color(red: 1.0, green: 0.88, blue: 0.45),
+                                              Color(red: 1.0, green: 0.66, blue: 0.25),
+                                              Color(red: 0.98, green: 0.47, blue: 0.36)],
+                                     startPoint: .topLeading, endPoint: .bottomTrailing))
+                .overlay(Capsule().strokeBorder(
+                    LinearGradient(colors: [.white.opacity(0.8), .white.opacity(0.1)], startPoint: .top, endPoint: .bottom),
+                    lineWidth: 1.2))
+                .shadow(color: Color(red: 1.0, green: 0.6, blue: 0.25).opacity(0.55), radius: 14, y: 4))
+        .overlay(alignment: .topTrailing) {
+            Sparkle().fill(Color.white).frame(width: 16, height: 16)
+                .shadow(color: .white, radius: 4).offset(x: -34, y: -4)
+        }
+        .padding(18)
+        .environment(\.colorScheme, .light)
+    }
+}
+
+/// Smaller brand-coloured support pill (Venmo / Cash App / Revolut).
+struct SupportPill: View {
+    let label: String
+    let symbol: String
+    let top: Color
+    let bottom: Color
+    var body: some View {
+        HStack(spacing: 7) {
+            Image(systemName: symbol).font(.system(size: 14, weight: .bold))
+            Text(label).font(.system(size: 15, weight: .bold, design: .rounded))
+        }
+        .foregroundStyle(.white)
+        .frame(width: 140, height: 42)
+        .background(
+            Capsule()
+                .fill(LinearGradient(colors: [top, bottom], startPoint: .top, endPoint: .bottom))
+                .overlay(Capsule().strokeBorder(Color.white.opacity(0.25), lineWidth: 1))
+                .shadow(color: bottom.opacity(0.4), radius: 6, y: 2))
+        .padding(8)
+    }
+}
+
 /// README "Download" button.
 struct DownloadButton: View {
     var body: some View {
@@ -388,6 +451,18 @@ func renderAssets(to dir: String) {
 
     // README download button
     writePNG(DownloadButton(), to: out.appendingPathComponent("download-button.png"), scale: 2)
+
+    // README "Support Glimmer" buttons
+    writePNG(SupportCoffeeButton(), to: out.appendingPathComponent("support-bmc.png"), scale: 2)
+    writePNG(SupportPill(label: "Venmo", symbol: "v.circle.fill",
+                         top: Color(red: 0.25, green: 0.62, blue: 1.0), bottom: Color(red: 0.0, green: 0.45, blue: 0.9)),
+             to: out.appendingPathComponent("support-venmo.png"), scale: 2)
+    writePNG(SupportPill(label: "Cash App", symbol: "dollarsign.circle.fill",
+                         top: Color(red: 0.2, green: 0.88, blue: 0.35), bottom: Color(red: 0.0, green: 0.68, blue: 0.2)),
+             to: out.appendingPathComponent("support-cashapp.png"), scale: 2)
+    writePNG(SupportPill(label: "Revolut", symbol: "r.circle.fill",
+                         top: Color(white: 0.28), bottom: Color(white: 0.06)),
+             to: out.appendingPathComponent("support-revolut.png"), scale: 2)
 
     // Panel screenshots
     let demo = GlimmerModel(previewScreen: 0.72, keyboard: 0.6, workaround: true)

@@ -25,6 +25,6 @@ tiffutil -cathidpicheck "$TMP/out/dmg-background.png" "$TMP/out/dmg-background@2
 cp "$TMP/out/icon-1024.png" docs/images/icon.png
 cp "$TMP/out/dmg-window.png" docs/images/dmg-window.png
 cp "$TMP/out/hero.png" "$TMP/out/panel-dark.png" "$TMP/out/panel-light.png" "$TMP/out/panel.gif" \
-   "$TMP/out/download-button.png" docs/images/
+   "$TMP/out/download-button.png" "$TMP/out"/support-*.png docs/images/
 echo "✓ Assets written to Resources/ and docs/images/"
 ls -lh docs/images Resources/AppIcon.icns Resources/dmg-background.tiff
