@@ -134,6 +134,9 @@ cd mac-glimmer
 ./scripts/make-dmg.sh     # or: build the drag-to-install disk image into ./dist
 ```
 
+Every push is built by GitHub Actions, and pushing a version tag (`v1.2.0`) publishes a Release
+with the DMG attached. See [docs/releasing.md](docs/releasing.md).
+
 > **Tip:** to keep that permission across rebuilds, build with a real signing identity
 > (`SIGN_IDENTITY=… ./scripts/build.sh`; the build script picks up an "Apple Development"
 > certificate automatically). Ad-hoc–signed rebuilds need the permission granted again.
