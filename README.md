@@ -10,6 +10,13 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/adfleshner/mac-glimmer/releases/latest/download/Glimmer.dmg">
+    <img src="docs/images/download-button.png" width="344" alt="Download Glimmer for macOS">
+  </a><br>
+  <sub>Free · Apple Silicon & Intel · macOS 13 Ventura or later · <a href="https://github.com/adfleshner/mac-glimmer/releases/latest">Release notes</a></sub>
+</p>
+
+<p align="center">
   <img src="docs/images/hero.png" alt="Glimmer's Control Center–style panel open from the menu bar">
 </p>
 
@@ -21,16 +28,20 @@ gives up on brightness. Glimmer is a tiny menu bar app that takes over where mac
 
 **Install in a minute:**
 
-1. **[Download Glimmer.dmg](https://github.com/adfleshner/mac-glimmer/releases/latest)** from Releases, open it and drag **Glimmer** onto **Applications**.
+1. **[Download Glimmer.dmg](https://github.com/adfleshner/mac-glimmer/releases/latest/download/Glimmer.dmg)**, open it and drag **Glimmer** onto **Applications**.
 2. Open Glimmer from Applications. If macOS says it *can't be opened*, go to
    **System Settings → Privacy & Security** and click **Open Anyway** (once — Glimmer isn't notarized by Apple).
 3. Click the **☀︎** in the menu bar. If it shows **Enable brightness keys…**, click it and switch
    Glimmer on in **System Settings → Privacy & Security → Accessibility**.
 
+<p align="center">
+  <img src="docs/images/dmg-window.png" width="560" alt="The Glimmer disk image: drag Glimmer into Applications">
+</p>
+
 That's it. Glimmer opens at every login (switch it off with **Open at login** in its panel).
 To remove it, quit it from the panel and drag it to the Trash.
 
-Prefer to build it yourself? `git clone git@github.com:adfleshner/mac-glimmer.git && cd mac-glimmer && ./scripts/install.sh`
+Prefer to build it yourself? `git clone https://github.com/adfleshner/mac-glimmer.git && cd mac-glimmer && ./scripts/install.sh`
 
 ---
 
@@ -110,7 +121,7 @@ anyone with the same problem can install in a minute.
 
 ### Download (recommended)
 
-1. Grab **Glimmer-x.y.z.dmg** from the [latest release](https://github.com/adfleshner/mac-glimmer/releases/latest).
+1. Download **[Glimmer.dmg](https://github.com/adfleshner/mac-glimmer/releases/latest/download/Glimmer.dmg)** (always the latest release).
 2. Open it and drag **Glimmer** onto **Applications**, then open Glimmer from Applications.
    (Running it straight from the disk image just reminds you to move it first.)
 3. First launch only: if macOS says Glimmer *can't be opened* or *can't be verified*, open
@@ -128,7 +139,7 @@ click it and switch Glimmer on in **System Settings → Privacy & Security → A
 Requires the Xcode Command Line Tools (`xcode-select --install`).
 
 ```bash
-git clone git@github.com:adfleshner/mac-glimmer.git
+git clone https://github.com/adfleshner/mac-glimmer.git
 cd mac-glimmer
 ./scripts/install.sh      # builds, copies to ~/Applications and opens it
 ./scripts/make-dmg.sh     # or: build the drag-to-install disk image into ./dist

@@ -23,6 +23,7 @@ echo "• Installing to $DEST"
 mkdir -p "$HOME/Applications"
 rm -rf "$DEST"
 cp -R build/Glimmer.app "$DEST"
+rm -rf build/Glimmer.app   # keep a single copy so login launches the installed one
 open "$DEST"
 
 echo "✓ Glimmer is running — look for the ☀︎ in your menu bar. It opens at every login."

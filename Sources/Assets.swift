@@ -189,6 +189,138 @@ struct HeroShot: View {
     }
 }
 
+/// Background of the disk-image window (660×400 pt). Finder draws the Glimmer icon at
+/// (165, 200) and the Applications folder at (495, 200) on top of it — see scripts/dmg-settings.py.
+struct DMGBackground: View {
+    var body: some View {
+        let ink = Color(red: 0.16, green: 0.14, blue: 0.32)
+        let warmTop = Color(red: 1.00, green: 0.80, blue: 0.42)
+        let warmBottom = Color(red: 0.98, green: 0.52, blue: 0.22)
+        ZStack {
+            LinearGradient(colors: [Color(red: 0.995, green: 0.975, blue: 0.945),
+                                    Color(red: 0.935, green: 0.915, blue: 0.975)],
+                           startPoint: .top, endPoint: .bottom)
+            // soft glow behind the arrow
+            Rectangle()
+                .fill(RadialGradient(colors: [warmTop.opacity(0.26), warmTop.opacity(0.08), .clear],
+                                     center: UnitPoint(x: 0.5, y: 0.49), startRadius: 0, endRadius: 210))
+
+            VStack(spacing: 6) {
+                Text("Drag Glimmer into Applications")
+                    .font(.system(size: 21, weight: .semibold, design: .rounded))
+                    .foregroundStyle(ink)
+                Text("Then open it from Applications and look for the ☀︎ in your menu bar.")
+                    .font(.system(size: 12.5))
+                    .foregroundStyle(ink.opacity(0.6))
+            }
+            .position(x: 330, y: 62)
+
+            // Arrow from the app to Applications
+            HStack(spacing: 0) {
+                Capsule()
+                    .fill(LinearGradient(colors: [warmTop, warmBottom], startPoint: .leading, endPoint: .trailing))
+                    .frame(width: 112, height: 8)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 30, weight: .heavy))
+                    .foregroundStyle(warmBottom)
+                    .offset(x: -14)
+            }
+            .shadow(color: warmBottom.opacity(0.35), radius: 6)
+            .position(x: 336, y: 196)
+
+            // Sparkles
+            Sparkle().fill(warmTop).frame(width: 18, height: 18).position(x: 300, y: 158)
+            Sparkle().fill(warmBottom.opacity(0.8)).frame(width: 11, height: 11).position(x: 374, y: 236)
+            Sparkle().fill(ink.opacity(0.18)).frame(width: 14, height: 14).position(x: 60, y: 330)
+            Sparkle().fill(ink.opacity(0.14)).frame(width: 10, height: 10).position(x: 612, y: 120)
+
+            Text("macOS blocked it on first launch?  System Settings → Privacy & Security → Open Anyway")
+                .font(.system(size: 10.5))
+                .foregroundStyle(ink.opacity(0.5))
+                .multilineTextAlignment(.center)
+                .frame(width: 560)
+                .position(x: 330, y: 362)
+        }
+        .frame(width: 660, height: 400)
+        .environment(\.colorScheme, .light)
+    }
+}
+
+/// README preview of the disk-image window: Finder chrome + background + the two icons.
+struct DMGWindowShot: View {
+    var body: some View {
+        let folder: NSImage = {
+            let icon = NSWorkspace.shared.icon(forFile: "/Applications")
+            icon.size = NSSize(width: 512, height: 512)   // pick the large representation
+            let rep = icon.bestRepresentation(for: NSRect(x: 0, y: 0, width: 512, height: 512), context: nil, hints: nil)
+            guard let cg = rep?.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return icon }
+            return NSImage(cgImage: cg, size: NSSize(width: 512, height: 512))
+        }()
+        VStack(spacing: 0) {
+            // Title bar
+            ZStack {
+                Color(red: 0.93, green: 0.93, blue: 0.94)
+                HStack(spacing: 8) {
+                    Circle().fill(Color(red: 1.0, green: 0.37, blue: 0.34)).frame(width: 12, height: 12)
+                    Circle().fill(Color(red: 1.0, green: 0.74, blue: 0.18)).frame(width: 12, height: 12)
+                    Circle().fill(Color(red: 0.16, green: 0.79, blue: 0.25)).frame(width: 12, height: 12)
+                    Spacer()
+                }
+                .padding(.leading, 12)
+                HStack(spacing: 5) {
+                    GlimmerIcon().frame(width: 1024, height: 1024).scaleEffect(16.0 / 1024).frame(width: 16, height: 16)
+                    Text("Glimmer").font(.system(size: 13, weight: .semibold)).foregroundStyle(Color(white: 0.3))
+                }
+            }
+            .frame(height: 28)
+            ZStack {
+                DMGBackground()
+                GlimmerIcon().frame(width: 1024, height: 1024).scaleEffect(112.0 / 1024).frame(width: 112, height: 112)
+                    .position(x: 165, y: 200)
+                Image(nsImage: folder).resizable().frame(width: 112, height: 112)
+                    .position(x: 495, y: 200)
+                Text("Glimmer").font(.system(size: 13)).foregroundStyle(.black).position(x: 165, y: 272)
+                Text("Applications").font(.system(size: 13)).foregroundStyle(.black).position(x: 495, y: 272)
+            }
+            .frame(width: 660, height: 400)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 11, style: .continuous).strokeBorder(Color.black.opacity(0.18), lineWidth: 0.5))
+        .shadow(color: .black.opacity(0.28), radius: 22, y: 12)
+        .padding(36)
+        .environment(\.colorScheme, .light)
+    }
+}
+
+/// README "Download" button.
+struct DownloadButton: View {
+    var body: some View {
+        HStack(spacing: 12) {
+            GlimmerIcon().frame(width: 1024, height: 1024).scaleEffect(40.0 / 1024).frame(width: 40, height: 40)
+            VStack(alignment: .leading, spacing: 1) {
+                Text("Download Glimmer")
+                    .font(.system(size: 17, weight: .bold, design: .rounded))
+                Text("for macOS · Apple Silicon & Intel · Free")
+                    .font(.system(size: 11, weight: .medium))
+                    .opacity(0.75)
+            }
+            Image(systemName: "arrow.down.circle.fill")
+                .font(.system(size: 22, weight: .semibold))
+                .padding(.leading, 6)
+        }
+        .foregroundStyle(.white)
+        .padding(.leading, 10).padding(.trailing, 18).padding(.vertical, 9)
+        .background(
+            Capsule()
+                .fill(LinearGradient(colors: [Color(red: 0.24, green: 0.20, blue: 0.52),
+                                              Color(red: 0.11, green: 0.09, blue: 0.27)],
+                                     startPoint: .top, endPoint: .bottom))
+                .overlay(Capsule().strokeBorder(Color.white.opacity(0.18), lineWidth: 1)))
+        .padding(6)
+        .environment(\.colorScheme, .dark)
+    }
+}
+
 // MARK: - Rendering
 
 @MainActor
@@ -248,6 +380,14 @@ func renderAssets(to dir: String) {
                      to: iconset.appendingPathComponent(name), scale: 1)
         }
     }
+
+    // Disk-image window background (1x + 2x, combined into a HiDPI TIFF by the script)
+    writePNG(DMGBackground(), to: out.appendingPathComponent("dmg-background.png"), scale: 1)
+    writePNG(DMGBackground(), to: out.appendingPathComponent("dmg-background@2x.png"), scale: 2)
+    writePNG(DMGWindowShot(), to: out.appendingPathComponent("dmg-window.png"), scale: 2)
+
+    // README download button
+    writePNG(DownloadButton(), to: out.appendingPathComponent("download-button.png"), scale: 2)
 
     // Panel screenshots
     let demo = GlimmerModel(previewScreen: 0.72, keyboard: 0.6, workaround: true)

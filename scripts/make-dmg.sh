@@ -1,64 +1,40 @@
 #!/bin/bash
-# Build Glimmer and package it as a drag-to-Applications disk image in ./dist
+# Build Glimmer and package it as a polished drag-to-Applications disk image: dist/Glimmer.dmg
 #
 #   ./scripts/make-dmg.sh
 #
-# Uses the same signing identity as build.sh (SIGN_IDENTITY, or an Apple Development /
-# Developer ID certificate if one is installed). With a Developer ID you can also notarize:
-#   xcrun notarytool submit dist/Glimmer-<version>.dmg --keychain-profile <profile> --wait
-#   xcrun stapler staple dist/Glimmer-<version>.dmg
+# The window layout (background with arrow, icon positions, no toolbar) comes from
+# scripts/dmg-settings.py and is written by dmgbuild (https://github.com/dmgbuild/dmgbuild),
+# which is installed into ./.venv-dmg on first use. The file name has no version in it so
+# https://github.com/adfleshner/mac-glimmer/releases/latest/download/Glimmer.dmg always works.
+#
+# Signing uses the same identity as build.sh. With a Developer ID you can also notarize:
+#   xcrun notarytool submit dist/Glimmer.dmg --keychain-profile <profile> --wait
+#   xcrun stapler staple dist/Glimmer.dmg
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 ./scripts/build.sh
 
-VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Resources/Info.plist)
-STAGE=build/dmg
-DMG="dist/Glimmer-$VERSION.dmg"
-rm -rf "$STAGE" && mkdir -p "$STAGE" dist
-rm -f "$DMG"
-
-cp -R build/Glimmer.app "$STAGE/"
-ln -s /Applications "$STAGE/Applications"
-cat > "$STAGE/Read Me.txt" <<'EOF'
-Glimmer — a glimmer of hope for every MacBook left in the dark.
-
-INSTALL
-1. Drag Glimmer onto the Applications folder.
-2. Open Glimmer from Applications. Look for the ☀︎ in the menu bar.
-
-IF MACOS SAYS GLIMMER "CAN'T BE OPENED" OR "CAN'T BE VERIFIED"
-Glimmer is free and open source but isn't notarized by Apple.
-Open System Settings → Privacy & Security, scroll down, and click "Open Anyway"
-next to the Glimmer message. You only need to do this once.
-
-BRIGHTNESS KEYS
-If the ☀︎ panel shows "Enable brightness keys…", click it and switch Glimmer on in
-System Settings → Privacy & Security → Accessibility.
-
-Glimmer opens at login automatically; turn that off with "Open at login" in its panel.
-To remove it: quit Glimmer from its panel and drag it to the Trash.
-
-https://github.com/adfleshner/mac-glimmer
-EOF
-
-# Volume icon
-cp Resources/AppIcon.icns "$STAGE/.VolumeIcon.icns"
-
-echo "• Creating $DMG"
-hdiutil create -quiet -volname "Glimmer" -srcfolder "$STAGE" -fs HFS+ -format UDZO -imagekey zlib-level=9 -ov "$DMG"
-
-# Mark the volume as having a custom icon (needs a read-write pass).
-if command -v SetFile >/dev/null 2>&1; then
-  RW=build/rw.dmg
-  hdiutil convert -quiet "$DMG" -format UDRW -o "$RW" -ov
-  MNT=$(hdiutil attach -nobrowse -noverify -noautoopen "$RW" | tail -1 | awk -F'\t' '{print $NF}')
-  SetFile -a C "$MNT" && SetFile -a V "$MNT/.VolumeIcon.icns" || true
-  hdiutil detach -quiet "$MNT"
-  rm -f "$DMG"
-  hdiutil convert -quiet "$RW" -format UDZO -imagekey zlib-level=9 -o "$DMG"
-  rm -f "$RW"
+# dmgbuild: use one already on PATH (CI installs it), else a private virtualenv.
+if command -v dmgbuild >/dev/null 2>&1; then
+  DMGBUILD=dmgbuild
+else
+  if [ ! -x .venv-dmg/bin/dmgbuild ]; then
+    echo "• Installing dmgbuild into .venv-dmg"
+    python3 -m venv .venv-dmg
+    .venv-dmg/bin/pip install --quiet --disable-pip-version-check "dmgbuild>=1.6"
+  fi
+  DMGBUILD=.venv-dmg/bin/dmgbuild
 fi
+
+VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Resources/Info.plist)
+DMG=dist/Glimmer.dmg
+mkdir -p dist
+rm -f "$DMG" "$DMG.sha256"
+
+echo "• Creating $DMG (Glimmer $VERSION)"
+"$DMGBUILD" -s scripts/dmg-settings.py -D app=build/Glimmer.app "Glimmer" "$DMG"
 
 SIGN_IDENTITY=${SIGN_IDENTITY:-$(security find-identity -v -p codesigning 2>/dev/null \
   | grep -E '"(Developer ID Application|Apple Development):' | head -1 | awk '{print $2}' || true)}
@@ -66,5 +42,9 @@ if [ -n "$SIGN_IDENTITY" ]; then
   codesign --force --sign "$SIGN_IDENTITY" "$DMG"
 fi
 
-shasum -a 256 "$DMG" | tee "$DMG.sha256"
+(cd dist && shasum -a 256 Glimmer.dmg | tee Glimmer.dmg.sha256)
 echo "✓ $DMG ($(du -h "$DMG" | cut -f1))"
+
+# Don't leave a second Glimmer.app lying around: macOS could launch it at login instead of
+# the one in Applications.
+rm -rf build/Glimmer.app

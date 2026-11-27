@@ -18,9 +18,14 @@ git tag -a v1.2.0 -m "Glimmer 1.2.0"
 git push origin v1.2.0
 ```
 
-The workflow builds `Glimmer-1.2.0.dmg`, creates the **Glimmer v1.2.0** release with install
-notes, the SHA-256 and GitHub's auto-generated change list, and attaches the DMG. The README's
-**Download** link (`/releases/latest`) then points at it.
+The workflow builds `Glimmer.dmg` (version 1.2.0 inside), creates the **Glimmer v1.2.0** release
+with install notes, the SHA-256 and GitHub's auto-generated change list, and attaches the DMG.
+The file name never changes, so the README's Download button
+(`/releases/latest/download/Glimmer.dmg`) always downloads the newest release directly.
+
+The disk-image window (background, arrow, icon positions) is laid out by
+[dmgbuild](https://github.com/dmgbuild/dmgbuild) from `scripts/dmg-settings.py`; the artwork is
+`Resources/dmg-background.tiff`, rendered by `scripts/render-assets.sh`.
 
 To (re)publish an existing tag, run the workflow by hand: **Actions → Build Glimmer → Run
 workflow** and enter the tag.
