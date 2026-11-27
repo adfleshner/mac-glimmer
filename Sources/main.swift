@@ -13,6 +13,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let popover = NSPopover()
 
     func applicationDidFinishLaunching(_ note: Notification) {
+        if runningFromDiskImage() {
+            let alert = NSAlert()
+            alert.messageText = "Move Glimmer to Applications"
+            alert.informativeText = "Glimmer is running from the disk image. Drag Glimmer into the Applications folder, then open it from there so it can start at login."
+            alert.addButton(withTitle: "Quit")
+            NSApp.activate(ignoringOtherApps: true)
+            alert.runModal()
+            NSApp.terminate(nil)
+            return
+        }
+        LoginItem.enableOnFirstLaunch()
+        model.openAtLogin = LoginItem.isEnabled
+
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         statusItem.button?.image = NSImage(systemSymbolName: "sun.max", accessibilityDescription: "Glimmer")
         statusItem.button?.target = self
@@ -78,6 +91,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 }
 
 let app = NSApplication.shared
+
+/// True when launched from a mounted DMG (or a quarantined, translocated copy of one).
+func runningFromDiskImage() -> Bool {
+    let path = Bundle.main.bundlePath
+    return path.hasPrefix("/Volumes/") || path.contains("/AppTranslocation/")
+}
+
+// `Glimmer --unregister-login-item`: used by scripts/uninstall.sh.
+if CommandLine.arguments.contains("--unregister-login-item") {
+    LoginItem.set(false)
+    exit(0)
+}
 
 // `Glimmer --render-assets <dir>`: draw the icon and README images, then exit.
 if let i = CommandLine.arguments.firstIndex(of: "--render-assets") {

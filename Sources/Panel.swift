@@ -84,6 +84,24 @@ struct PillButtonStyle: ButtonStyle {
     }
 }
 
+/// Small on/off switch (pure SwiftUI, so it also renders in screenshots).
+struct PillSwitch: View {
+    @Binding var isOn: Bool
+    var body: some View {
+        ZStack(alignment: isOn ? .trailing : .leading) {
+            Capsule().fill(isOn ? Color.accentColor : Color.primary.opacity(0.18))
+            Circle().fill(Color.white).padding(2).shadow(color: .black.opacity(0.2), radius: 1, y: 0.5)
+        }
+        .frame(width: 30, height: 17)
+        .contentShape(Capsule())
+        .onTapGesture { withAnimation(.easeOut(duration: 0.15)) { isOn.toggle() } }
+        .accessibilityElement()
+        .accessibilityLabel("Open at login")
+        .accessibilityValue(isOn ? "On" : "Off")
+        .accessibilityAddTraits(.isButton)
+    }
+}
+
 struct PanelView: View {
     @ObservedObject var model: GlimmerModel
     let enableKeys: () -> Void
@@ -98,6 +116,14 @@ struct PanelView: View {
                     CapsuleSlider(value: $model.keyboard, symbol: "light.max")
                 }
             }
+            HStack {
+                Text("Open at login").font(.system(size: 12))
+                Spacer()
+                PillSwitch(isOn: $model.openAtLogin)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color.primary.opacity(0.06)))
             HStack(spacing: 8) {
                 if !model.needsKeys {
                     Label("Using macOS controls", systemImage: "checkmark.circle")

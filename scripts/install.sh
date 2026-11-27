@@ -1,37 +1,30 @@
 #!/bin/bash
-# Build Glimmer, install it to ~/Applications, and start it now and at every login.
+# Build Glimmer from source, install it to ~/Applications and open it.
+# Glimmer adds itself to Login Items on first launch (toggle: "Open at login" in its panel).
 #
 #   ./scripts/install.sh
+#
+# Prefer not to build? Download Glimmer.dmg from the Releases page and drag it to Applications.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-LABEL=com.adfleshner.glimmer
 DEST="$HOME/Applications/Glimmer.app"
-AGENT="$HOME/Library/LaunchAgents/$LABEL.plist"
-UID_=$(id -u)
+OLD_AGENT="$HOME/Library/LaunchAgents/com.adfleshner.glimmer.plist"
 
 ./scripts/build.sh
 
+# Stop a running copy (and remove the launch agent older versions used).
+launchctl bootout "gui/$(id -u)/com.adfleshner.glimmer" 2>/dev/null || true
+rm -f "$OLD_AGENT"
+pkill -x Glimmer 2>/dev/null || true
+sleep 1
+
 echo "• Installing to $DEST"
-launchctl bootout "gui/$UID_/$LABEL" 2>/dev/null || true
-mkdir -p "$HOME/Applications" "$HOME/Library/LaunchAgents"
+mkdir -p "$HOME/Applications"
 rm -rf "$DEST"
 cp -R build/Glimmer.app "$DEST"
+open "$DEST"
 
-echo "• Starting at login ($AGENT)"
-cat > "$AGENT" <<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0"><dict>
-  <key>Label</key><string>$LABEL</string>
-  <key>ProgramArguments</key><array><string>$DEST/Contents/MacOS/Glimmer</string></array>
-  <key>RunAtLoad</key><true/>
-  <key>KeepAlive</key><dict><key>SuccessfulExit</key><false/></dict>
-  <key>LimitLoadToSessionType</key><string>Aqua</string>
-</dict></plist>
-EOF
-launchctl bootstrap "gui/$UID_" "$AGENT"
-
-echo "✓ Glimmer is running — look for the ☀︎ in your menu bar."
+echo "✓ Glimmer is running — look for the ☀︎ in your menu bar. It opens at every login."
 echo "  If it shows \"Enable brightness keys…\", click it and allow Glimmer in"
 echo "  System Settings → Privacy & Security → Accessibility."

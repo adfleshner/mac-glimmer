@@ -14,6 +14,11 @@ final class GlimmerModel: ObservableObject {
     @Published var screen: Double = 1 { didSet { screenChanged(oldValue) } }
     @Published var keyboard: Double = 0.75 { didSet { keyboardChanged(oldValue) } }
     @Published var keysActive = false
+    /// Mirrors System Settings → Login Items. Preview models never touch it.
+    @Published var openAtLogin = false {
+        didSet { if !isPreview, openAtLogin != oldValue, openAtLogin != LoginItem.isEnabled { openAtLogin = LoginItem.set(openAtLogin) } }
+    }
+    private var isPreview = false
     @Published private(set) var screenWorkaround = false
     @Published private(set) var keyboardWorkaround = false
     @Published private(set) var hasKeyboard = false
@@ -25,12 +30,15 @@ final class GlimmerModel: ObservableObject {
         screenBackend = makeScreenBrightness()
         keyboardBackend = makeKeyboardBacklight()
         detect()
+        openAtLogin = LoginItem.isEnabled
     }
 
     /// A model that never touches the hardware — used to render screenshots.
     init(previewScreen: Double, keyboard: Double, workaround: Bool) {
+        isPreview = true
         screenBackend = PreviewScreen(isWorkaround: workaround)
         keyboardBackend = PreviewKeyboard(isWorkaround: workaround)
+        openAtLogin = true
         screenWorkaround = workaround
         keyboardWorkaround = workaround
         hasKeyboard = true
@@ -67,6 +75,7 @@ final class GlimmerModel: ObservableObject {
 
     /// Pull the current levels from macOS for native backends (it may have changed them).
     func refreshFromSystem() {
+        if !isPreview { openAtLogin = LoginItem.isEnabled }
         syncing = true
         if !screenWorkaround, let v = screenBackend.currentLevel() { screen = v }
         if !keyboardWorkaround, let v = keyboardBackend?.currentLevel() { keyboard = v }

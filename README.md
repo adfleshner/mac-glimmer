@@ -19,15 +19,18 @@
 keys do nothing?** It isn't broken hardware. macOS doesn't recognise the new panel, so it
 gives up on brightness. Glimmer is a tiny menu bar app that takes over where macOS gave up.
 
-**Install** (needs the Xcode Command Line Tools: `xcode-select --install`):
+**Install in a minute:**
 
-```bash
-git clone git@github.com:adfleshner/mac-glimmer.git && cd mac-glimmer && ./scripts/install.sh
-```
+1. **[Download Glimmer.dmg](https://github.com/adfleshner/mac-glimmer/releases/latest)** from Releases, open it and drag **Glimmer** onto **Applications**.
+2. Open Glimmer from Applications. If macOS says it *can't be opened*, go to
+   **System Settings → Privacy & Security** and click **Open Anyway** (once — Glimmer isn't notarized by Apple).
+3. Click the **☀︎** in the menu bar. If it shows **Enable brightness keys…**, click it and switch
+   Glimmer on in **System Settings → Privacy & Security → Accessibility**.
 
-Then click the **☀︎** in the menu bar and, if it asks, choose **Enable brightness keys…**
-and switch Glimmer on in **System Settings → Privacy & Security → Accessibility**.
-That's it. It starts at every login. To remove it: `./scripts/uninstall.sh`.
+That's it. Glimmer opens at every login (switch it off with **Open at login** in its panel).
+To remove it, quit it from the panel and drag it to the Trash.
+
+Prefer to build it yourself? `git clone git@github.com:adfleshner/mac-glimmer.git && cd mac-glimmer && ./scripts/install.sh`
 
 ---
 
@@ -105,18 +108,31 @@ anyone with the same problem can install in a minute.
 
 ## Install
 
+### Download (recommended)
+
+1. Grab **Glimmer-x.y.z.dmg** from the [latest release](https://github.com/adfleshner/mac-glimmer/releases/latest).
+2. Open it and drag **Glimmer** onto **Applications**, then open Glimmer from Applications.
+   (Running it straight from the disk image just reminds you to move it first.)
+3. First launch only: if macOS says Glimmer *can't be opened* or *can't be verified*, open
+   **System Settings → Privacy & Security** and click **Open Anyway**. Glimmer is free and open
+   source but isn't notarized by Apple, so macOS asks once.
+
+Glimmer adds itself to **Login Items** the first time it runs; switch that off any time with
+**Open at login** in its panel (or in System Settings → General → Login Items).
+
+If your Mac needs the brightness-key workaround, the panel shows **Enable brightness keys…** —
+click it and switch Glimmer on in **System Settings → Privacy & Security → Accessibility**.
+
+### Build from source
+
 Requires the Xcode Command Line Tools (`xcode-select --install`).
 
 ```bash
 git clone git@github.com:adfleshner/mac-glimmer.git
 cd mac-glimmer
-./scripts/install.sh
+./scripts/install.sh      # builds, copies to ~/Applications and opens it
+./scripts/make-dmg.sh     # or: build the drag-to-install disk image into ./dist
 ```
-
-This builds Glimmer, copies it to `~/Applications/Glimmer.app`, and starts it now and at every login.
-
-If your Mac needs the brightness-key workaround, the panel shows **Enable brightness keys…** —
-click it and switch Glimmer on in **System Settings → Privacy & Security → Accessibility**.
 
 > **Tip:** to keep that permission across rebuilds, build with a real signing identity
 > (`SIGN_IDENTITY=… ./scripts/build.sh`; the build script picks up an "Apple Development"
@@ -124,8 +140,10 @@ click it and switch Glimmer on in **System Settings → Privacy & Security → A
 
 ### Uninstall
 
+Quit Glimmer from its panel and drag it to the Trash — or, from the source folder:
+
 ```bash
-./scripts/uninstall.sh
+./scripts/uninstall.sh   # also removes the login item, settings and permission
 ```
 
 ### Icon and screenshots
